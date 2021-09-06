@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заголовок страницы</title>
+    <link href="../node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
+    <link
+      href="../node_modules/@pnotify/mobile/dist/PNotifyMobile.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css"
+      integrity="sha512-ISS7cAi1PEhQ8jnbJpJZMd29NlhNj4AWYyLOSp2CE/CsHxTCu+r+t0D2yoJudVrd0/8fTVPUVDzY5Tvli75u/g=="
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-wrapper">
+        <form id="choose-form">
+          <div class="change-input" id="choose-form">
+            <p>Select image type:</p>
+            <label>
+              <input type="radio" name="color" value="all" checked />
+              <span>All</span>
+            </label>
+            <label>
+              <input type="radio" name="color" value="photo" />
+              <span>Photo</span>
+            </label>
+            <label>
+              <input type="radio" name="color" value="vector" />
+              <span>Vector</span>
+            </label>
+            <label>
+              <input type="radio" name="color" value="illustration" />
+              <span>illustration</span>
+            </label>
+          </div>
+        </form>
+        <form class="orientation-input change-input" id="orientation-form">
+          <p>Selection of image orientation</p>
+          <label>
+            <input type="radio" name="color" value="all" checked />
+            <span>All</span>
+          </label>
+          <label>
+            <input type="radio" name="color" value="horizontal" />
+            <span>horizontal</span>
+          </label>
+          <label>
+            <input type="radio" name="color" value="vertical" />
+            <span>vertical</span>
+          </label>
+        </form>
+      </div>
+      <form class="search-form" id="search-form">
+        <input
+          id="input"
+          type="text"
+          name="query"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button id="btn" class="btn">Search</button>
+        <button class="clear--btn hidden">Clear field</button>
+      </form>
+      <ul class="gallery hidden">
+        <!-- Список <li> с карточками изображений -->
+      </ul>
+      <button class="more hidden">Load more</button>
+      <button class="to-top">To top</button>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>

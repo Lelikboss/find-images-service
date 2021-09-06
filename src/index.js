@@ -1,0 +1,91 @@
+import * as basicLightbox from 'basiclightbox';
+import 'basiclightbox/dist/basicLightbox.min.css';
+import './sass/main.scss';
+import { refs } from './js/refs';
+import generateImg from './js/apiService.js';
+import { renderCollection, hidden } from './js/marcup.js';
+import debounce from 'lodash.debounce';
+import { scrollIntoView, scrollTop, showToTopBtn } from './js/scroll.js';
+import { alert } from '../node_modules/@pnotify/core/dist/PNotify.js';
+import '../node_modules/@pnotify/core/dist/BrightTheme.css';
+import '../node_modules/@pnotify/core/dist/Material.css';
+
+let currentPage = 1;
+let type = 'all';
+let orientation = 'all';
+refs.chooseFormEl.addEventListener('input', chooseOption);
+function chooseOption(e) {
+  e.preventDefault();
+  type = e.target.value;
+}
+refs.chooseOrientationFormEl.addEventListener('input', chooseOrientation);
+function chooseOrientation(e) {
+  e.preventDefault();
+  orientation = e.target.value;
+  console.log(orientation);
+}
+const searchImgFromAPI = e => {
+  e.preventDefault();
+  destroyContent();
+  generate();
+};
+const generate = () => {
+  const value = refs.inputEl.value;
+
+  generateImg({ value, currentPage, type, orientation })
+    // .then(result => renderCollection(result.hits))
+    // .then(result => console.log(result.hits))
+    .then(result => {
+      if (result.hits.length === 0) {
+        alert('This image does not exist');
+      }
+      if (result.hits.length === 12) {
+        renderCollection(result.hits);
+        refs.galleryContainer.classList.remove('hidden');
+        refs.loadMoreBtn.classList.remove('hidden');
+        refs.clearFieldBtn.classList.remove('hidden');
+      } else {
+        refs.clearFieldBtn.classList.remove('hidden');
+        refs.loadMoreBtn.classList.add('hidden');
+        renderCollection(result.hits);
+      }
+    })
+    .then(() => currentPage++);
+};
+
+const destroyContent = () => {
+  refs.galleryContainer.innerHTML = '';
+  currentPage = 1;
+};
+
+const clearFieldOnClick = e => {
+  e.preventDefault();
+  refs.inputEl.value = '';
+  refs.galleryContainer.innerHTML = '';
+  refs.galleryContainer.classList.add('hidden');
+  currentPage = 1;
+  hiddenBtn();
+};
+const hiddenBtn = () => {
+  refs.loadMoreBtn.classList.add('hidden');
+  refs.clearFieldBtn.classList.add('hidden');
+};
+const openLargeImg = e => {
+  const largeImg = e.target.dataset.source;
+
+  if (largeImg === undefined) {
+    return;
+  }
+  console.log(type);
+  const instance = basicLightbox.create(`
+<img src="${largeImg}"/>
+`);
+  instance.show();
+};
+
+refs.galleryContainer.addEventListener('click', openLargeImg);
+refs.clearFieldBtn.addEventListener('click', clearFieldOnClick);
+refs.formEl.addEventListener('submit', searchImgFromAPI);
+refs.loadMoreBtn.addEventListener('click', debounce(generate, 500));
+refs.loadMoreBtn.addEventListener('click', debounce(scrollIntoView, 1500));
+window.addEventListener('scroll', showToTopBtn);
